@@ -9,7 +9,7 @@ Genlogin supports MacOS and Windows platforms.
 
 <!--`npm i genlogin`-->
 
-for running example.py install slenium
+for running example.py install selenium
 
 `pip install selenium`
 
