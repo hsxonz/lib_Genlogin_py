@@ -4,7 +4,7 @@ class Genlogin:
 
     def __init__(self, api_key):
         self.api_key = api_key
-        self.LOCAL_URL = 'http://localhost:55550/profiles'
+        self.LOCAL_URL = 'http://localhost:55550/backend/profiles'
 
     def getProfile(self, id):
         url = f'{self.LOCAL_URL}/{id}'
@@ -23,7 +23,7 @@ class Genlogin:
             response.raise_for_status()
             data = response.json().get('data')
             return {
-                'profiles': data.get('lst_profile'),
+                'profiles': data.get('items'),
                 'pagination': data.get('pagination')
             }
         except requests.exceptions.RequestException as err:
@@ -45,10 +45,10 @@ class Genlogin:
             if  resEndpoint["data"]["wsEndpoint"] != '' : 
                 return {'success': True, 'wsEndpoint': resEndpoint["data"]["wsEndpoint"]}
             
-            response = requests.get(url)
+            response = requests.put(url)
             response.raise_for_status()
             if response.json().get('success'):
-                return {'success': True, 'wsEndpoint': response.json().get('wsEndpoint')}
+                return {'success': True, 'wsEndpoint': response.json().get('data').get('wsEndpoint')}
             else:
                 resEndpoint = self.getWsEndpoint(id)
                 if resEndpoint.get('wsEndpoint') != '':
@@ -61,7 +61,7 @@ class Genlogin:
     def stopProfile(self, id):
         url = f'{self.LOCAL_URL}/{id}/stop'
         try:
-            response = requests.get(url)
+            response = requests.put(url)
             response.raise_for_status()
             return response.json()
         except requests.exceptions.RequestException as err:
